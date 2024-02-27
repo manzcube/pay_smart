@@ -1,13 +1,16 @@
 import React from "react";
 import { auth } from "../db/firebase";
+import { toast } from "react-toastify";
 import { signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 const provider = new GoogleAuthProvider();
+
+const icon = require("../images/icon.png");
 
 const AuthButton: React.FC = () => {
   const SignIn = () => {
     signInWithPopup(auth, provider)
       .then((result) => {
-        console.log(result);
+        toast.success(`Welcome ${result?.user.displayName}`);
       })
       .catch((error: any) => {
         // Handle Errors here.
@@ -17,9 +20,18 @@ const AuthButton: React.FC = () => {
       });
   };
   return (
-    <button id="auth-button" onClick={SignIn}>
-      Sign In With Google
-    </button>
+    <div id="auth-button-wrap">
+      <h2>
+        <img src={icon} alt="paysmart_icon" />
+        <p>Pay Smart</p>
+      </h2>
+      <div className="auth-button-letter">
+        <p>Welcome to PaySmart!</p>
+      </div>
+      <button id="auth-button" onClick={SignIn}>
+        <span>Sign In With Google</span>
+      </button>
+    </div>
   );
 };
 

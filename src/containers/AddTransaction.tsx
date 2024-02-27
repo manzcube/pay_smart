@@ -3,14 +3,19 @@ import { useNavigate } from "react-router-dom";
 
 import { addDoc, collection, updateDoc, doc } from "firebase/firestore";
 
-import { Source } from "../constants/interfaces";
+import {
+  TNotification,
+  NotificationInitialState,
+  Source,
+  INotification,
+} from "../constants/interfaces";
 
 import Notification from "../components/Notification";
 
 // DB
 import { getDocs } from "firebase/firestore";
 import { db } from "../db/firebase";
-import { AddTransactionProps, Transaction } from "../constants/interfaces";
+import { Transaction } from "../constants/interfaces";
 import { selectedSourceInitialState } from "../constants/state";
 
 let createNewDate = new Date();
@@ -24,21 +29,30 @@ const initialState = {
   selectedSource: "",
 };
 
-const AddTransaction: React.FC<AddTransactionProps> = ({ transactionType }) => {
+const AddTransaction: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<Transaction>(initialState);
-  const [notificationMessage, setNotificationMessage] = useState<string>("");
+  const [notification, setNotification] = useState<TNotification>(
+    NotificationInitialState
+  );
   const [allSources, setAllSources] = useState<Source[]>([]);
   const [selectedSource, setSelectedSource] = useState<Source>(
     selectedSourceInitialState
   );
 
+  let transactionType =
+    window.location.pathname.split("/")[1] === "income" ? true : false;
+
   const { title, amount, date } = formData;
 
   const throwAnError = (message: string) => {
-    setNotificationMessage(message);
+    setNotification({
+      message: message,
+      active: true,
+      type: "error",
+    });
     setTimeout(() => {
-      setNotificationMessage("");
+      setNotification(NotificationInitialState);
       return;
     }, 5000);
   };
@@ -115,7 +129,11 @@ const AddTransaction: React.FC<AddTransactionProps> = ({ transactionType }) => {
 
   return (
     <div className="transaction-page">
-      <Notification message={notificationMessage} />
+      <Notification
+        message={notification.message}
+        active={notification.active}
+        type={notification.type}
+      />
       <h5>Add {transactionType ? "Income" : "Expense"}</h5>
       <div className="select-sources">
         {allSources.map((source) => (

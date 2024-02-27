@@ -25,6 +25,26 @@ export interface Transaction {
   amount: number;
 }
 
-export interface AddTransactionProps {
-  transactionType: boolean;
+export interface INotification {
+  active: boolean;
+  message: string;
+  type: string;
 }
+
+export type TNotification = {
+  active: boolean;
+  message: string;
+  type: string;
+};
+
+export const NotificationInitialState = {
+  message: "",
+  type: "error",
+  active: false,
+};
+
+export type TSource = {
+  name: string;
+  balance: number;
+  id: string;
+};

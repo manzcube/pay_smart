@@ -6,15 +6,20 @@ import Notification from "../components/Notification";
 
 // DB
 import { db } from "../db/firebase";
-import { SourceFormData } from "../constants/interfaces";
+import {
+  NotificationInitialState,
+  SourceFormData,
+  TNotification,
+} from "../constants/interfaces";
 
 import { sourceInitialState } from "../constants/state";
 
 const AddSource: React.FC = () => {
   const [formData, setFormData] = useState<SourceFormData>(sourceInitialState);
   const navigate = useNavigate();
-  const [notificationMessage, setNotificationMessage] = useState<string>("");
-
+  const [notification, setNotification] = useState<TNotification>(
+    NotificationInitialState
+  );
   const { name, balance } = formData;
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -25,9 +30,13 @@ const AddSource: React.FC = () => {
   };
 
   const throwAnError = (message: string) => {
-    setNotificationMessage(message);
+    setNotification({
+      message: message,
+      type: "error",
+      active: true,
+    });
     setTimeout(() => {
-      setNotificationMessage("");
+      setNotification(NotificationInitialState);
       return;
     }, 5000);
   };
@@ -52,7 +61,11 @@ const AddSource: React.FC = () => {
 
   return (
     <div className="add-source">
-      <Notification message={notificationMessage} />
+      <Notification
+        active={notification.active}
+        message={notification.message}
+        type={notification.type}
+      />
 
       <h5>Add Source</h5>
       <form onSubmit={onSubmit}>

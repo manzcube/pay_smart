@@ -17,6 +17,7 @@ import "./style/dashboard.scss";
 
 // Middleware
 import Authenticated from "./middleware/Authenticated";
+import { ToastContainer } from "react-toastify";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -25,14 +26,9 @@ root.render(
   <BrowserRouter>
     <Authenticated>
       <Routes>
-        <Route
-          path="/add-income"
-          element={<AddTransaction transactionType={true} />}
-        />
-        <Route
-          path="/add-expense"
-          element={<AddTransaction transactionType={false} />}
-        />
+        <Route path="/add-income" element={<AddTransaction />} />
+        <Route path="/add-expense" element={<AddTransaction />} />
+        <Route path="/sources" element={<AddSource />} />
         <Route path="/add-source" element={<AddSource />} />
         <Route path="/*" element={<Dashboard />} />
       </Routes>

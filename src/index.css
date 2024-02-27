@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap");
 
 body {
   margin: 0;
-  font-family: "Rubik", sans-serif;
+  font-family: "Kode Mono", monospace;
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   overflow: hidden;
-  background-color: rgb(226, 226, 226);
+  background-color: rgb(255, 255, 255);
 }
 
 code {

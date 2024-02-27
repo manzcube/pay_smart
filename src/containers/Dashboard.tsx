@@ -6,13 +6,14 @@ import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
 import { db } from "../db/firebase.js";
 import { auth } from "../db/firebase.js";
 
-import { Source, Doc } from "../constants/interfaces.js";
+import { TSource, Doc } from "../constants/interfaces.js";
 import { signOut } from "firebase/auth";
+import Source from "../components/Source";
 
 const Dashboard: React.FC = () => {
   const [allTransactions, setAllTransactions] = useState<Doc[]>([]);
   const navigate = useNavigate();
-  const [allSources, setAllSources] = useState<Source[]>([]);
+  const [allSources, setAllSources] = useState<TSource[]>([]);
   let netWorthAmount = allSources.reduce((accumulator, currentValue) => {
     return Number(accumulator) + Number(currentValue.balance);
   }, 0);
@@ -37,7 +38,7 @@ const Dashboard: React.FC = () => {
         const sourcesSnapshot = await getDocs(collection(db, "sources"));
 
         const newData: Doc[] = [];
-        const sourcesData: Source[] = [];
+        const sourcesData: TSource[] = [];
 
         expensesSnapshot.forEach((doc) => {
           const { type, date, amount, title, selectedSource } = doc.data();
@@ -97,27 +98,8 @@ const Dashboard: React.FC = () => {
       </div>
       <p className="section-title">Sources</p>
       <div className="sources">
-        {allSources.map((source) => (
-          <div className="source" key={source.id}>
-            <button onClick={() => deleteSource(source.id)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="x-delete-button"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18 18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            <h6>{source.name}</h6>
-            <p>{(source.balance / 1).toFixed(2)}</p>
-          </div>
+        {allSources.map((source: TSource) => (
+          <Source id={source.id} name={source.name} balance={source.balance} />
         ))}
         <Link to="/add-source" id="plus-icon">
           Add
